@@ -61,7 +61,6 @@
     CGFloat longLineY = rect.size.height - longScaleHeight;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
     // 设置线的宽度, 默认是1像素
     //CGContextSetLineWidth(context, 2.0);
     CGContextSetLineCap(context, kCGLineCapButt);
@@ -75,28 +74,40 @@
     }
     
     NSDictionary *attribute = @{NSFontAttributeName:scaleTitleFont, NSForegroundColorAttributeName:[UIColor colorWithWhite:0.7 alpha:1]};
+    NSMutableDictionary *attributeDic = [[NSMutableDictionary alloc] initWithDictionary:attribute];
+    if (self.selectMinValue == self.minValue)
+    {
+        [attributeDic setObject:minLineColor forKey:NSForegroundColorAttributeName];
+    }
+    if (self.selectMaxValue == self.minValue)
+    {
+        [attributeDic setObject:maxLineColor forKey:NSForegroundColorAttributeName];
+    }
+
     CGFloat width = [numStr boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:0 attributes:attribute context:nil].size.width;
     [numStr drawInRect:CGRectMake(rect.size.width-width*0.5f, 0, width, scaleTitleHeight) withAttributes:attribute];
+    
+    CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
     CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
     CGContextStrokePath(context);
 
-    if (self.selectMinValue == self.minValue)
-    {
-        // 起使点
-        CGContextSetStrokeColorWithColor(context, minLineColor.CGColor);
-        CGContextMoveToPoint(context, rect.size.width, longLineY);
-        CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
-        CGContextStrokePath(context);
-    }
-
-    if (self.selectMaxValue == self.minValue)
-    {
-        // 起使点
-        CGContextSetStrokeColorWithColor(context, maxLineColor.CGColor);
-        CGContextMoveToPoint(context, rect.size.width, longLineY);
-        CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
-        CGContextStrokePath(context);
-    }
+//    if (self.selectMinValue == self.minValue)
+//    {
+//        // 起使点
+//        CGContextSetStrokeColorWithColor(context, minLineColor.CGColor);
+//        CGContextMoveToPoint(context, rect.size.width, longLineY);
+//        CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
+//        CGContextStrokePath(context);
+//    }
+//
+//    if (self.selectMaxValue == self.minValue)
+//    {
+//        // 起使点
+//        CGContextSetStrokeColorWithColor(context, maxLineColor.CGColor);
+//        CGContextMoveToPoint(context, rect.size.width, longLineY);
+//        CGContextAddLineToPoint(context, rect.size.width, rect.size.height);
+//        CGContextStrokePath(context);
+//    }
 }
 
 @end
@@ -131,7 +142,6 @@
     NSInteger step = (self.maxValue - self.minValue)/10;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(context, [UIColor grayColor].CGColor);
     CGContextSetLineWidth(context, 0.5f);
     CGContextSetLineCap(context, kCGLineCapButt);
     for (NSInteger i = 0; i<=10; i++)
@@ -147,8 +157,18 @@
             }
 
             NSDictionary *attribute = @{NSFontAttributeName:scaleTitleFont,NSForegroundColorAttributeName:[UIColor colorWithWhite:0.7 alpha:1]};
+            NSMutableDictionary *attributeDic = [[NSMutableDictionary alloc] initWithDictionary:attribute];
+            if (self.selectMinValue == i*step+self.minValue)
+            {
+                [attributeDic setObject:minLineColor forKey:NSForegroundColorAttributeName];
+            }
+            if (self.selectMaxValue == i*step+self.minValue)
+            {
+                [attributeDic setObject:maxLineColor forKey:NSForegroundColorAttributeName];
+            }
+
             CGFloat width = [numStr boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:0 attributes:attribute context:nil].size.width;
-            [numStr drawInRect:CGRectMake(startX+lineCenterX*i-width*0.5f, 0, width, scaleTitleHeight) withAttributes:attribute];
+            [numStr drawInRect:CGRectMake(startX+lineCenterX*i-width*0.5f, 0, width, scaleTitleHeight) withAttributes:attributeDic];
         }
         else if (i%5 == 0)
         {
@@ -160,6 +180,7 @@
             // 起使点
             CGContextMoveToPoint(context, startX+lineCenterX*i, shortLineY);
         }
+        CGContextSetStrokeColorWithColor(context, [UIColor grayColor].CGColor);
         CGContextAddLineToPoint(context, startX+lineCenterX*i, bottomY);
         CGContextStrokePath(context);
     }
@@ -204,7 +225,6 @@
     CGFloat longLineY = rect.size.height - longScaleHeight;
     
     CGContextRef context = UIGraphicsGetCurrentContext();
-    CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
     CGContextSetLineCap(context, kCGLineCapButt);
     
     // 起使点
@@ -216,28 +236,40 @@
     }
 
     NSDictionary *attribute = @{NSFontAttributeName:scaleTitleFont, NSForegroundColorAttributeName:[UIColor colorWithWhite:0.7 alpha:1]};
+    NSMutableDictionary *attributeDic = [[NSMutableDictionary alloc] initWithDictionary:attribute];
+    if (self.selectMinValue == self.maxValue)
+    {
+        [attributeDic setObject:minLineColor forKey:NSForegroundColorAttributeName];
+    }
+    if (self.selectMaxValue == self.maxValue)
+    {
+        [attributeDic setObject:maxLineColor forKey:NSForegroundColorAttributeName];
+    }
+    
     CGFloat width = [numStr boundingRectWithSize:CGSizeMake(CGFLOAT_MAX, CGFLOAT_MAX) options:0 attributes:attribute context:nil].size.width;
     [numStr drawInRect:CGRectMake(-width*0.5f, 0, width, scaleTitleHeight) withAttributes:attribute];
+
+    CGContextSetStrokeColorWithColor(context, [UIColor darkGrayColor].CGColor);
     CGContextAddLineToPoint(context, 0, rect.size.height);
     CGContextStrokePath(context);
 
-    if (self.selectMinValue == self.maxValue)
-    {
-        // 起使点
-        CGContextSetStrokeColorWithColor(context, minLineColor.CGColor);
-        CGContextMoveToPoint(context, 0, longLineY);
-        CGContextAddLineToPoint(context, 0, rect.size.height);
-        CGContextStrokePath(context);
-    }
-    
-    if (self.selectMaxValue == self.maxValue)
-    {
-        // 起使点
-        CGContextSetStrokeColorWithColor(context, maxLineColor.CGColor);
-        CGContextMoveToPoint(context, 0, longLineY);
-        CGContextAddLineToPoint(context, 0, rect.size.height);
-        CGContextStrokePath(context);
-    }
+//    if (self.selectMinValue == self.maxValue)
+//    {
+//        // 起使点
+//        CGContextSetStrokeColorWithColor(context, minLineColor.CGColor);
+//        CGContextMoveToPoint(context, 0, longLineY);
+//        CGContextAddLineToPoint(context, 0, rect.size.height);
+//        CGContextStrokePath(context);
+//    }
+//
+//    if (self.selectMaxValue == self.maxValue)
+//    {
+//        // 起使点
+//        CGContextSetStrokeColorWithColor(context, maxLineColor.CGColor);
+//        CGContextMoveToPoint(context, 0, longLineY);
+//        CGContextAddLineToPoint(context, 0, rect.size.height);
+//        CGContextStrokePath(context);
+//    }
 }
 
 @end
@@ -311,6 +343,8 @@
         
         [self setupRedline];
         [self setBottomLine];
+        
+        self.showTitle = YES;
     }
     
     return self;
@@ -377,6 +411,40 @@
     [self addSubview:bottomLine];
 }
 
+- (void)setShowTitle:(BOOL)showTitle
+{
+    if (_showTitle == showTitle)
+    {
+        return;
+    }
+    
+    _showTitle = showTitle;
+    
+    self.valueTextField.hidden = !showTitle;
+    
+    CGFloat height = valueTextFieldHeight+valueTextFieldGap+collectionViewHeight;
+    if (!showTitle)
+    {
+        height = collectionViewHeight;
+    }
+
+    CGRect frame = self.frame;
+    frame.size.height = height;
+    self.frame = frame;
+
+    frame = self.collectionView.frame;
+    frame.origin.y = height-collectionViewHeight;
+    self.collectionView.frame = frame;
+    
+    frame = self.redLine.frame;
+    frame.origin.y = self.frame.size.height-redLineHeight;
+    self.redLine.frame = frame;
+
+    frame = self.bottomLine.frame;
+    frame.origin.y = self.bounds.size.height-(1.0f / [UIScreen mainScreen].scale);
+    self.bottomLine.frame = frame;
+}
+
 - (void)setSelectMaxValue:(NSInteger)selectMaxValue
 {
     if (selectMaxValue>self.maxValue)
@@ -424,7 +492,7 @@
     }
 }
 
--(void)didChangeValue
+- (void)didChangeValue
 {
     NSInteger value = [self.valueTextField.text integerValue];
     
@@ -595,7 +663,7 @@
 
 - (void)setRealValue:(NSInteger)realValue animated:(BOOL)animated
 {
-    NSLog(@"%@", @(realValue));
+    //NSLog(@"%@", @(realValue));
     
     self.realValue = realValue;
     self.valueTextField.text = [NSString stringWithFormat:@"%ld", self.realValue];

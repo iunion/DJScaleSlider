@@ -27,11 +27,13 @@ typedef NSString * _Nonnull (^scaleSliderFormatValueHandler)(NSInteger value);
 @property (nonatomic, weak) id <DJScaleSliderDelegate> delegate;
 
 //@property (nonatomic, assign) DJScaleSlider_ScaleType scaleType;
-@property (nonatomic, assign) BOOL needSnap;
+//@property (nonatomic, assign) BOOL needSnap;
 
 @property (nonatomic, assign, readonly) NSInteger minValue;
 @property (nonatomic, assign, readonly) NSInteger maxValue;
 @property (nonatomic, assign, readonly) NSUInteger step;
+
+@property (nonatomic, assign) BOOL showTitle;
 
 @property (nullable, nonatomic, copy) scaleSliderFormatValueHandler valueFormat;
 
