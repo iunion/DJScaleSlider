@@ -14,6 +14,9 @@
     DJScaleSliderDelegate
 >
 
+@property (nonatomic, strong) DJScaleSlider *scaleSlider;
+@property (nonatomic, strong) UIButton *btn;
+
 @end
 
 @implementation ViewController
@@ -30,9 +33,31 @@
     };
     scaleSlider.selectMinValue = 3000;
     scaleSlider.selectMaxValue = 6000;
-    scaleSlider.showTitle = NO;
+    //scaleSlider.showTitle = NO;
     
     [self.view addSubview:scaleSlider];
+    self.scaleSlider = scaleSlider;
+    
+    UIButton *btn = [UIButton buttonWithType:UIButtonTypeCustom];
+    btn.frame = CGRectMake(20, 100, 60, 44);
+    btn.backgroundColor = [UIColor blueColor];
+    [btn setTitle:@"隐藏" forState:UIControlStateNormal];
+    [btn addTarget:self action:@selector(btnClick) forControlEvents:UIControlEventTouchUpInside];
+    [self.view addSubview:btn];
+    self.btn = btn;
+}
+
+- (void)btnClick
+{
+    self.scaleSlider.showTitle = !self.scaleSlider.showTitle;
+    if (self.scaleSlider.showTitle)
+    {
+        [self.btn setTitle:@"隐藏" forState:UIControlStateNormal];
+    }
+    else
+    {
+        [self.btn setTitle:@"显示" forState:UIControlStateNormal];
+    }
 }
 
 
